@@ -1,0 +1,108 @@
+#Import Discord library!
+import discord
+
+#Importing commands
+from discord.ext import commands
+# This is the variable that will define 
+# an instance of dababy bot.
+
+#importing getenv to run the token
+from os import getenv
+
+#importing youtube_dl
+from youtube_dl import YoutubeDL
+
+#importing env 
+
+bot = commands.Bot(command_prefix = "!ye!")
+
+ydl_preset = {'format':'bestaudio', 'noplaylist': True}
+ffmpeg_pre = {'before_options':'-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5', 'options':'-vn'}
+
+@bot.event
+async def on_ready():
+    """Tells the owner if the bot is running and ready to go."""
+    print("standby")
+ 
+
+@bot.command(name="DaBaby")
+async def Dababied(ctx, member:discord.Member):
+    """Sends embeded da baby pictures
+    unaware strangers"""
+    dababied = discord.Embed(title="DaBaby-Baby", description=f'{member.name} just got dababied', color=discord.Colour.dark_red()) # use hex or use predefined color
+    dababied.set_image(url="https://cdn.discordapp.com/attachments/828220439419158553/828298756754636840/Dababy_BabyOnBaby.png")
+    # Images, footer, author and thumbnails are special elements
+    # We manipulate them by using a method 
+    # i.e. embed_name.set_thumbnail(url=url)
+    # embed_name.set_image(url=url)
+
+
+    # await messagable.send(embed=embed_name)
+    # 1. send it to the channel that the command was invoked in
+    # 2. send it to the member who got dababied
+    await member.send(f'{member.name}You just got DaBabied boi!')
+    await ctx.channel.send(embed=dababied)
+    
+    # ctx represents the context of the command invokation
+    # ctx.author represents the person who invoked the command
+    # member represents the person who we tagged
+    await ctx.author.send(f'You just dababied {member.name}.')
+
+@bot.command(name="Ride")
+async def ride_Give(ctx, member:discord.Member):
+    """Gives a person a ride in a convertible"""
+    convertible = discord.Embed(title="Convertible-Baby", description=f'{member.name} just got a convertible :oncoming_taxi:', color=discord.Colour.dark_purple())
+    convertible.set_image(url="https://tenor.com/view/dababy-convertable-gif-20206040")
+    await member.send(f'{member.name} You just recieved a convertible')
+    await ctx.channel.send(embed=convertible)
+    await ctx.author.send(f'You just gave a convertible to {member.name}.')
+
+@bot.command(name="DababySkin")
+async def skin_give(ctx,member:discord.Member):
+    """Gives an unwarned user a skin."""
+    skin = discord.Embed(title="Skin-YEE", description=f'{member.name} DaBaby has a skin less gooo, it is for free YEE :man_artist:!', color=discord.Colour.dark_magenta())
+    skin.set_image(url="https://cdn.discordapp.com/attachments/766128720381476875/829219014554157076/e99zbs4949261.png")
+    await member.send(f'{member.name} You just unlocked DaBaby skin in fortnite for free!')
+    await ctx.channel.send(embed=skin)
+
+async def play_music(voice_client):
+    url = "https://www.youtube.com/watch?v=medC-dly8MY"
+    with YoutubeDL(ydl_preset) as ydl:
+        info = ydl.extract_info('ytsearch:dababy ye ye soundeffect', download=False)['entries'][0]
+    url = info['url']
+    voice_client.play(discord.FFmpegPCMAudio(url, **ffmpeg_pre), after=lambda e: play_music(voice_client))
+
+@bot.command(name="YEE")
+async def yee(ctx):
+    """Comes into the voice chat the author is in and says YEE!"""
+   
+    if ctx.author.voice:
+        channel = ctx.author.voice.channel
+        voice_client = await channel.connect() # A voice client is an instance of a bot playing an audio
+        await play_music(voice_client)
+        
+    else:
+        voice_client = discord.utils.get(bot.voice_clients,guild=ctx.guild)
+        await ctx.reply("YEYE are you an idiot, get in a voice channel. YEYE")
+        await play_music(voice_client)
+
+@bot.command(name="Stop", aviases="S")
+async def stop(ctx): 
+    """Makes the bot exit the voice channel"""
+    voice = discord.utils.get(bot.voice_clients,guild=ctx.guild)
+    await voice.disconnect()
+
+'''
+@bot.command(name="Less Goo")
+async def less_goo(ctx, member:discord.Member)
+    """Comes into the voice chat the author is in and says Less Goo!!"""
+    
+
+
+@bot.command(name="DababyMusic")
+async def Music(ctx, member:discord.Member)
+    """Runs basically like a music bot but onyl runs DaBaby's songs."""
+'''
+
+#Run commmand
+bot.run("")
